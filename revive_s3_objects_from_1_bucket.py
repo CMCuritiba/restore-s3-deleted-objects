@@ -7,8 +7,11 @@ import pytz
 import datetime
 import sys
 
+# https://docs.python.org/3/howto/logging.html
+# Uncomment the filename line to log to a file
 logging.basicConfig(
-    format='%(levelname)s:%(message)s', level=logging.WARNING)
+    # filename="revive_s3_objects_from_1_bucket-{}.log".format(datetime.datetime.now().strftime("%Y%m%d%I%M%S")),
+    format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 utc=pytz.UTC
@@ -19,12 +22,14 @@ s3 = boto3.resource('s3')
 
 # TODO: replace name-of-the-bucket with bucket name
 bucket_name = 'name-of-the-bucket'
+# TODO: replace 'path/to/process' with bucket prefix to be processed
+prefix='path/to/process'
 
 if bucket_name == 'name-of-the-bucket':
     logger.error("Please, set bucket_name before running this script")
     sys.exit(1)
 
-#TODO: replace date and time accordingly
+# TODO: replace date and time accordingly
 # Syntax:
 # datetime(year, month, day, hour, minute, second, microsecond, UTC-00:00)
 # Example:
@@ -101,19 +106,24 @@ while is_trunckated:
     
     if next_key_marker:
     
-        all_objects = s3.meta.client.list_object_versions(Bucket=bucket.name, KeyMarker=next_key_marker, VersionIdMarker = next_version_id_marker)
+        # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_object_versions.html
+        all_objects = s3.meta.client.list_object_versions(Bucket=bucket.name, KeyMarker=next_key_marker, Prefix=prefix, VersionIdMarker = next_version_id_marker)
         
     else:
         
-        all_objects = s3.meta.client.list_object_versions(Bucket=bucket.name)
+        # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_object_versions.html
+        all_objects = s3.meta.client.list_object_versions(Bucket=bucket.name, Prefix=prefix, )
         
 
     if 'Versions' in all_objects:
         all_versions = all_objects['Versions']
 
         for version in all_versions:
+            # Uncomment the line below to skip lock files
+            # if not version['IsLatest'] and "~lock" not in version['Key']:
             if not version['IsLatest']:
                 revive_object(bucket, version['Key'])
+                # logger.info("Would revive: %s", version['Key'])
 
     is_trunckated = all_objects['IsTruncated']
     if is_trunckated:
