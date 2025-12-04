@@ -8,8 +8,9 @@
         - [1) If you have access to the AWS console](#1-if-you-have-access-to-the-aws-console)
         - [2) If you have access key and secret key credentials:](#2-if-you-have-access-key-and-secret-key-credentials)
     - [Costs](#costs)
-  - [2 - Restaure arquivos acidentalmente apagados do Amazon S3](#2---restaure-arquivos-acidentalmente-apagados-do-amazon-s3)
     - [Disclaimer](#disclaimer)
+  - [2 - Restaure arquivos acidentalmente apagados do Amazon S3](#2---restaure-arquivos-acidentalmente-apagados-do-amazon-s3)
+  - [References](#references)
   - [Security](#security)
   - [License](#license)
 
@@ -92,15 +93,23 @@ This script executes requests made against Amazon S3 buckets and files, like GET
 
 ---
 
+### Disclaimer
+
+This script is for information purposes only and should not be used for production workloads.
+
+---
+
 ## 2 - Restaure arquivos acidentalmente apagados do Amazon S3
 
 TBD
 
 ---
 
-### Disclaimer
+## References
 
-This script is for information purposes only and should not be used for production workloads.
+Additional references:
+
+- [How do I restore deleted files in S3?](https://repost.aws/questions/QU3N8NXnGXSy2aiK9zxmMoXw/how-do-i-restore-deleted-files-in-s3)
 
 ---
 
